@@ -9,9 +9,19 @@ treeItems.forEach((li) => {
     return;
   }
 
-  const textNode = li.firstChild;
+  let textNode = null;
 
-  if (!textNode || textNode.nodeType !== 3) {
+  for (const node of li.childNodes) {
+    if (
+      node.nodeType === Node.TEXT_NODE &&
+      node.textContent.trim().length > 0
+    ) {
+      textNode = node;
+      break;
+    }
+  }
+
+  if (!textNode) {
     return;
   }
 
@@ -20,8 +30,6 @@ treeItems.forEach((li) => {
   span.textContent = textNode.textContent.trim();
   li.insertBefore(span, textNode);
   li.removeChild(textNode);
-
-  sublist.hidden = false;
 
   span.addEventListener('click', () => {
     sublist.hidden = !sublist.hidden;
